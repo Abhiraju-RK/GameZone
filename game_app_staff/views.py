@@ -18,6 +18,7 @@ def staff_register(request):
         first_name=request.POST.get("first_name")
         last_name=request.POST.get("last_name")
         email=request.POST.get("email")
+        phone=request.POST.get('phone')
         password=request.POST.get("password")
         confirm_password=request.POST.get("confirm_password")
 
@@ -31,8 +32,11 @@ def staff_register(request):
         if confirm_password!=password:
             messages.error(request,"Confirm password Didnt match !!")
             return redirect("staff_register")
+        if len(phone)!=10:
+            messages.error(request,"Phone number must be 10 digit !!")
+            return redirect('staff_register')
         
-        user=CustomUser.objects.create_user(username=username,email=email,first_name=first_name,last_name=last_name,password=password)
+        user=CustomUser.objects.create_user(username=username,email=email,phone=phone,first_name=first_name,last_name=last_name,password=password)
         user.save()
 
         Staff.objects.create(user=user)
@@ -52,7 +56,6 @@ def staff_login(request):
             messages.error(request, "Invalid email or password!")
             return redirect("staff_login")
 
-        # Authenticate using username
         user = authenticate(request, email=email, password=password)
 
         if user is not None:
@@ -141,7 +144,7 @@ def edit_game(request,game_id):
         games.category=request.POST.get('category')
         games.save()
         messages.success(request,"Edited Successfully")
-        return redirect('game_list')
+        return redirect('staff_game_list')
     return render(request,'edit_game.html',{'games':games})
 
 

@@ -3,6 +3,7 @@ from game_app_user.models import CustomUser
 
 class  Staff(models.Model):
     user=models.OneToOneField(CustomUser,on_delete=models.CASCADE,related_name='staff_profile')
+    phone=models.CharField(max_length=15)
     is_staff_member=models.BooleanField(default=True)
     
 
